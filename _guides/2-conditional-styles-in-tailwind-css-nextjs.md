@@ -76,7 +76,7 @@ export const cn = (...input: ClassValue[]) => {
 
 This utility function will allow us to use Tailwind CSS classes in our components. It will also allow us to use Tailwind CSS with Next.js' built-in CSS modules.
 
-## Let's use this!
+## Let's use this
 
 Now Let's refactor our component to use this utility function.
 

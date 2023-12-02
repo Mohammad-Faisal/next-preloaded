@@ -1,0 +1,69 @@
+import React from 'react'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
+type TOption = {
+  label: string
+  value: string
+}
+
+interface Props {
+  name: string
+  label: string
+  control: any
+  options: TOption[]
+  description?: string
+  placeholder?: string
+}
+
+const SelectElement = ({
+  name,
+  label,
+  description,
+  options,
+  control,
+  placeholder,
+}: Props) => {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormDescription>{description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+export default SelectElement

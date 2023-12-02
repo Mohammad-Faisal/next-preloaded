@@ -1,10 +1,14 @@
+import DemoForm from '@/components/forms/demo'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button>Click me</Button>
+      <div className="p-4 shadow-md">
+        <h2> Demo Form</h2>
+        <DemoForm />
+      </div>
     </main>
   )
 }

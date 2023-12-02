@@ -12,8 +12,6 @@ npx create-next-app@latest next-ease --typescript --tailwind --eslint
 
 This will create a new NextJS project with TypeScript, Tailwind CSS, and Eslint.
 
-
-
 ## Install ShandCN UI
 
 Let's install ShandCN UI in our project. We can install it using npm or yarn.
@@ -44,7 +42,7 @@ Where is your global CSS file? › › app/globals.css
 
 Because if you are using `src` folder for your project you need to change it to `src/app/globals.css`. Othwerwise you will get 404 error for `globals.css` file.
 
-## Use it!
+## Use it
 
 Now you are ready to use ShandCN UI in your project. You can import any component from `@shadcn/ui` and use it in your project.
 
@@ -55,8 +53,8 @@ npx shadcn-ui@latest add button
 It will add a button component in your project. You can import it in your project and use it.
 
 ```js
-import { Button } from "@/components/ui/button"
- 
+import { Button } from '@/components/ui/button'
+
 export default function Home() {
   return (
     <div>
