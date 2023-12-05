@@ -1,5 +1,11 @@
 import { PageRoutes } from '@/constants/page-routes'
-import { Building, FileCode, Home, PersonStandingIcon } from 'lucide-react'
+import {
+  Building,
+  FileCode,
+  Home,
+  PersonStandingIcon,
+  User,
+} from 'lucide-react'
 import Link from 'next/link'
 
 const ICON_SIZE = 20
@@ -19,6 +25,11 @@ const navigationSidebarItems = [
     title: 'Agents',
     link: PageRoutes.admin.AGENTS,
     icon: <PersonStandingIcon size={ICON_SIZE} />,
+  },
+  {
+    title: 'Users',
+    link: PageRoutes.admin.USERS,
+    icon: <User size={ICON_SIZE} />,
   },
 ]
 

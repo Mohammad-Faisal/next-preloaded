@@ -1,57 +1,136 @@
-import React from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../ui/table'
+'use client'
+import { ColumnDef } from '@tanstack/react-table'
+import { DataTable } from './data-table'
+import { DataTableColumnHeader } from './data-table/data-table-column-header'
+import { DataTableRowActions } from './data-table/data-table-row-actions'
 
-const MortgagesTable = () => {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Order ID</TableHead>
-          <TableHead>Customer Name</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Total</TableHead>
-          <TableHead>Status</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">#3210</TableCell>
-          <TableCell>Olivia Martin</TableCell>
-          <TableCell>February 20, 2023</TableCell>
-          <TableCell>$42.25</TableCell>
-          <TableCell>Shipped</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">#3209</TableCell>
-          <TableCell>Ava Johnson</TableCell>
-          <TableCell>January 5, 2023</TableCell>
-          <TableCell>$74.99</TableCell>
-          <TableCell>Paid</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">#3204</TableCell>
-          <TableCell>Michael Johnson</TableCell>
-          <TableCell>August 3, 2022</TableCell>
-          <TableCell>$64.75</TableCell>
-          <TableCell>Unfulfilled</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">#3203</TableCell>
-          <TableCell>Lisa Anderson</TableCell>
-          <TableCell>July 15, 2022</TableCell>
-          <TableCell>$34.50</TableCell>
-          <TableCell>Shipped</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  )
+export type Payment = {
+  id: string
+  amount: number
+  status: 'pending' | 'processing' | 'success' | 'failed'
+  email: string
 }
 
-export default MortgagesTable
+export const columns: ColumnDef<Payment>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: 'email',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount',
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+  },
+]
+
+export default function MortgagesTable() {
+  return (
+    <DataTable
+      columns={columns}
+      data={
+        [
+          {
+            id: '728ed52f',
+            amount: 100,
+            status: 'pending',
+            email: 'm@example.com',
+          },
+          {
+            id: '728ed52f',
+            amount: 100,
+            status: 'pending',
+            email: 'm@example.com',
+          },
+          {
+            id: 'a1b2c3d4',
+            amount: 150,
+            status: 'completed',
+            email: 'john@example.com',
+          },
+          {
+            id: 'e5f6g7h8',
+            amount: 75,
+            status: 'rejected',
+            email: 'jane@example.com',
+          },
+          {
+            id: 'i9j0k1l2',
+            amount: 200,
+            status: 'pending',
+            email: 'alex@example.com',
+          },
+          {
+            id: 'm3n4o5p6',
+            amount: 50,
+            status: 'completed',
+            email: 'sam@example.com',
+          },
+          {
+            id: 'q7r8s9t0',
+            amount: 120,
+            status: 'pending',
+            email: 'emily@example.com',
+          },
+          {
+            id: 'u1v2w3x4',
+            amount: 80,
+            status: 'rejected',
+            email: 'david@example.com',
+          },
+          {
+            id: 'y5z6a7b8',
+            amount: 180,
+            status: 'completed',
+            email: 'lisa@example.com',
+          },
+          {
+            id: 'c9d0e1f2',
+            amount: 60,
+            status: 'pending',
+            email: 'chris@example.com',
+          },
+          {
+            id: 'g3h4i5j6',
+            amount: 90,
+            status: 'completed',
+            email: 'sara@example.com',
+          },
+          {
+            id: 'k7l8m9n0',
+            amount: 110,
+            status: 'pending',
+            email: 'peter@example.com',
+          },
+          {
+            id: 'o1p2q3r4',
+            amount: 70,
+            status: 'rejected',
+            email: 'anna@example.com',
+          },
+          {
+            id: 's5t6u7v8',
+            amount: 130,
+            status: 'completed',
+            email: 'michael@example.com',
+          },
+        ] as Payment[]
+      }
+    />
+  )
+}
