@@ -8,15 +8,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
   name: string
   label: string
   description?: string
-  control: any
 }
 
-const SwitchElement = ({ name, label, description, control }: Props) => {
+const SwitchElement = ({ name, label, description }: Props) => {
+  const { control } = useFormContext()
   return (
     <FormField
       control={control}

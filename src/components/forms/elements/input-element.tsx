@@ -8,15 +8,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
-  control: any
   name: string
   label: string
   description?: string
 }
 
-const InputElement = ({ name, label, description, control }: Props) => {
+const InputElement = ({ name, label, description }: Props) => {
+  const { control } = useFormContext()
+
   return (
     <FormField
       control={control}
@@ -25,7 +27,7 @@ const InputElement = ({ name, label, description, control }: Props) => {
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder="shadcn" {...field} />
+            <Input placeholder="" {...field} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

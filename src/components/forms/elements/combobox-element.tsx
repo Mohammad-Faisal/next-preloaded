@@ -25,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { CaretSortIcon } from '@radix-ui/react-icons'
+import { useFormContext } from 'react-hook-form'
 
 type TOption = {
   label: string
@@ -34,8 +35,6 @@ type TOption = {
 interface Props {
   name: string
   label: string
-  control: any
-  form: any
   options: TOption[]
   description?: string
   placeholder?: string
@@ -46,13 +45,13 @@ const ComboboxElement = ({
   label,
   description,
   options,
-  control,
   placeholder,
-  form,
 }: Props) => {
+  const { control, setValue } = useFormContext()
+
   return (
     <FormField
-      control={form.control}
+      control={control}
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
@@ -86,7 +85,7 @@ const ComboboxElement = ({
                       value={option.label}
                       key={option.value}
                       onSelect={() => {
-                        form.setValue(name, option.value)
+                        setValue(name, option.value)
                       }}
                     >
                       {option.label}

@@ -70,20 +70,11 @@ const DemoForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <InputElement
-          name="username"
-          label={'User Name'}
-          control={form.control}
-        />
-        <TextAreaElement
-          name="description"
-          label={'Description'}
-          control={form.control}
-        />
+        <InputElement name="username" label={'User Name'} />
+        <TextAreaElement name="description" label={'Description'} />
 
         <SwitchElement
           name="marketing_emails"
-          control={form.control}
           label={'Marketing Emails'}
           description=""
         />
@@ -91,7 +82,6 @@ const DemoForm = () => {
         <SelectElement
           name="email"
           label={'Email'}
-          control={form.control}
           options={[
             {
               label: 'First',
@@ -107,7 +97,6 @@ const DemoForm = () => {
         <RadioGroupElement
           name="notification"
           label={'Notify me about'}
-          control={form.control}
           options={[
             {
               label: 'All',
@@ -124,17 +113,11 @@ const DemoForm = () => {
           ]}
         />
 
-        <DatePickerElement
-          name="dob"
-          control={form.control}
-          label={'Date of Birth'}
-        />
+        <DatePickerElement name="dob" label={'Date of Birth'} />
 
         <ComboboxElement
           name="language"
           label={'Language'}
-          control={form.control}
-          form={form}
           placeholder={'Select language'}
           options={languages}
         />

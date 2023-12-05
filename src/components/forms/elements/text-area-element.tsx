@@ -8,15 +8,16 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
-  control: any
   name: string
   label: string
   description?: string
 }
 
-const TextAreaElement = ({ name, label, description, control }: Props) => {
+const TextAreaElement = ({ name, label, description }: Props) => {
+  const { control } = useFormContext()
   return (
     <FormField
       control={control}
@@ -25,7 +26,7 @@ const TextAreaElement = ({ name, label, description, control }: Props) => {
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Textarea placeholder="shadcn" {...field} />
+            <Textarea placeholder="" {...field} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

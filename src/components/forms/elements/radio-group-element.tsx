@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useFormContext } from 'react-hook-form'
 
 type TOption = {
   label: string
@@ -24,8 +25,6 @@ type TOption = {
 interface Props {
   name: string
   label: string
-
-  control: any
   options: TOption[]
   description?: string
   placeholder?: string
@@ -36,9 +35,9 @@ const RadioGroupElement = ({
   label,
   description,
   options,
-  control,
   placeholder,
 }: Props) => {
+  const { control } = useFormContext()
   return (
     <>
       <FormField

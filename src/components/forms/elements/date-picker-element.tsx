@@ -14,15 +14,17 @@ import { Popover } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 interface Props {
-  control: any
   name: string
   label: string
   description?: string
 }
 
-const DatePickerElement = ({ name, label, description, control }: Props) => {
+const DatePickerElement = ({ name, label, description }: Props) => {
+  const { control } = useFormContext()
+
   return (
     <FormField
       control={control}
