@@ -41,5 +41,7 @@ export const userColumns: ColumnDef<User>[] = [
 
 export default function UsersTable() {
   const { loading, users } = useGetUsers()
-  return <DataTable columns={userColumns} data={users ?? []} />
+  return (
+    <DataTable columns={userColumns} data={users ?? []} isLoading={loading} />
+  )
 }

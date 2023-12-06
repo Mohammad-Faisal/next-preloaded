@@ -31,11 +31,13 @@ import { DataTableToolbar } from '@/components/tables/data-table/data-table-tool
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -91,7 +93,19 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading && (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <div className="flex items-center justify-center">
+                    <div className="h-8 w-8 animate-spin rounded-full border-t-4 border-solid border-slate-600"></div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {table.getRowModel().rows?.length && !isLoading ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
