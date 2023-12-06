@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import { useToast } from '@/components/ui/use-toast'
 import { LocalStorageKeys } from '@/constants/local-storage-keys'
 

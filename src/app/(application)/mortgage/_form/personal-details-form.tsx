@@ -46,7 +46,10 @@ const formSchema = z.object({
   }),
 })
 
-const PersonalDetailsForm = () => {
+interface Props {
+  onSubmitForm: (values: z.infer<typeof formSchema>) => void
+}
+const PersonalDetailsForm = ({ onSubmitForm }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -54,8 +57,6 @@ const PersonalDetailsForm = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
-
-  console.log(form.formState.errors)
 
   return (
     <Form {...form}>
