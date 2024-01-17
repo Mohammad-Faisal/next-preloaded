@@ -1,6 +1,8 @@
+import { EmirateEnum, IncomeProfileEnum, MortgageStatusEnum, ResidenceTypeEnum, UserRoleEnum } from './enums'
+
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 export interface QueryOptions {
   language: string
@@ -16,17 +18,17 @@ export interface SuccessResponse<T> {
   statusCode: number
 }
 
-export interface User {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  createdAt: string
-  updatedAt: string
-  role: string
-  isEmailConfirmed: boolean
-}
+// export interface User {
+//   id: number
+//   firstName: string
+//   lastName: string
+//   email: string
+//   password: string
+//   createdAt: string
+//   updatedAt: string
+//   role: string
+//   isEmailConfirmed: boolean
+// }
 
 export interface MortgageApplication {
   id: number
@@ -43,8 +45,25 @@ export interface MortgageApplication {
   createdAt: string
   updatedAt: string
   userId: number
-  dialCode: string
   country: string
+  actions: string
+  status: MortgageStatusEnum
+}
+
+export interface RequirementApplication {
+  id: number
+  name: string
+  requiredDocuments: { name: string; documentType: string }[]
+  incomeProfile: IncomeProfileEnum
+  residenceType: ResidenceTypeEnum
+  createdAt: string
+  updatedAt: string
+  preApprovalFee: number
+  processingFee: number
+  lifeInsurance: number
+  propertyInsurance: number
+  rate: number
+  valuationFee: number
 }
 
 export interface Property {
@@ -63,8 +82,9 @@ export interface Property {
   landmark?: string | null
   createdAt: Date
   updatedAt: Date
-  locationId?: number | null
+  locationId?: string
   minimumContract?: number | null
+  emirate: EmirateEnum
   noticePeriod?: number | null
   deedNumber?: string | null
   unitNumber?: number | null
@@ -77,22 +97,48 @@ export interface Property {
   agentInfoId?: number | null
   paymentInterval?: string | null
   emirateId: number
-  // projectStatus?: Properties_projectStatus | null;
   numberOfCheques?: number | null
-  completionDate?: Date | null
+  completionDate?: string | null
   noticePeriodOfRemainingRentalAgreement?: number | null
   numberOfLavatory?: number | null
   rentalAmount?: number | null
   trakheesiPermitNo?: string
   lat?: number | null
   lng?: number | null
-  // AdvertiseDocuments: AdvertiseDocuments[];
-  // AgentInformations?: AgentInformations | null;
-  // Emirates: Emirates;
-  // PropertyTypes: PropertyTypes;
-  // PropertyTypeCategories: PropertyTypeCategories;
-  // PropertyLocations?: PropertyLocations | null;
-  // Users?: Users | null;
-  // PropertyAmenities: PropertyAmenities[];
-  // PropertyDocuments: PropertyDocuments[];
+  status: string
+}
+
+export type TOption = {
+  label: string
+  value: string
+}
+
+export type PreSignedFile = {
+  url: string
+  expiry: number
+}
+
+export type User = {
+  id: number
+  email: string
+  firstName: string
+  lastName: string
+  role: UserRoleEnum
+  createdAt: string
+  updatedAt: string
+}
+
+export type historyType = {
+  id: number
+  title: string
+  description: string
+  mortgageId: number
+}
+
+export interface Email {
+  subject: string
+  name: string
+  emailFrom: string
+  emailTo: string
+  message: string
 }

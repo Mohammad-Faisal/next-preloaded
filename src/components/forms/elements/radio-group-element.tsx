@@ -1,26 +1,9 @@
-import React from 'react'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import React, { ChangeEvent } from 'react'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { useFormContext } from 'react-hook-form'
-
-type TOption = {
-  label: string
-  value: string
-}
+import { Controller, useFormContext } from 'react-hook-form'
+import { TOption } from '@/constants/types'
+import { cn } from '@/lib/utils'
 
 interface Props {
   name: string
@@ -28,19 +11,15 @@ interface Props {
   options: TOption[]
   description?: string
   placeholder?: string
+  className?: string
+  disabled?: boolean
 }
 
-const RadioGroupElement = ({
-  name,
-  label,
-  description,
-  options,
-  placeholder,
-}: Props) => {
+const RadioGroupElement = ({ name, label, options, className, disabled = false }: Props) => {
   const { control } = useFormContext()
   return (
     <>
-      <FormField
+      <Controller
         control={control}
         name={name}
         render={({ field }) => (
@@ -48,21 +27,16 @@ const RadioGroupElement = ({
             <FormLabel>{label}</FormLabel>
             <FormControl>
               <RadioGroup
+                defaultValue={field.value ?? null}
                 onValueChange={field.onChange}
-                defaultValue={field.value}
-                className="flex flex-col space-y-1"
+                className={cn('flex', className)}
               >
                 {options.map((option) => (
-                  <FormItem
-                    key={option.value}
-                    className="flex items-center space-x-3 space-y-0"
-                  >
+                  <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value={option.value} />
+                      <RadioGroupItem disabled={disabled} value={option.value} />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      {option.label}
-                    </FormLabel>
+                    <FormLabel className="font-normal">{option.label}</FormLabel>
                   </FormItem>
                 ))}
               </RadioGroup>

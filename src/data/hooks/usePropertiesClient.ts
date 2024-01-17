@@ -1,56 +1,131 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { userClient } from '../clients/usersClient'
 import { ApiEndpoints } from '@/constants/api'
 import { propertiesClient } from '../clients/propertiesClient'
+import { toast } from '@/components/ui/use-toast'
+import { PageRoutes } from '@/constants/page-routes'
+import { useRouter } from 'next/navigation'
 
 export function useGetProperties() {
   const { isLoading, data } = useQuery({
     queryKey: [ApiEndpoints.PROPERTIES],
-    queryFn: () => propertiesClient.all(),
+    queryFn: () => propertiesClient.all()
   })
 
   return { data: data?.data, loading: isLoading }
 }
 
-// export const useUpdateOpinionMutation = () => {
-//   const queryClient = useQueryClient()
-//   const navigate = useNavigate()
-//   return useMutation(opinionClient.update, {
-//     onSuccess: () => {
-//       toast.success('Opinion Successfully Updated')
-//       navigate(AppRoutes.OPINION_EDITOR)
-//     },
-//     onSettled: () => {
-//       queryClient.invalidateQueries(ApiEndpoints.USERS)
-//     },
-//   })
-// }
+export function useGetLocations() {
+  const { isLoading, data } = useQuery({
+    queryKey: [ApiEndpoints.PROPERTIES],
+    queryFn: () => propertiesClient.all()
+  })
 
-// export const useCreateOpinionMutation = () => {
-//   const queryClient = useQueryClient()
-//   const navigate = useNavigate()
-//   return useMutation(opinionClient.create, {
-//     onSuccess: (data) => {
-//       toast.success('Opinion Successfully Created')
-//       navigate(AppRoutes.OPINION_EDITOR)
-//     },
-//     onSettled: () => {
-//       queryClient.invalidateQueries(ApiEndpoints.OPINION)
-//     },
-//   })
-// }
+  return { data: data?.data, loading: isLoading }
+}
 
-// export const useDeleteOpinionMutation = () => {
-//   const queryClient = useQueryClient()
-//   const navigate = useNavigate()
-//   return useMutation(opinionClient.delete, {
-//     onSuccess: (data) => {
-//       toast.success('Opinion and its contents are successfully deleted!')
-//       navigate(AppRoutes.OPINION_EDITOR)
-//       queryClient.refetchQueries(ApiEndpoints.OPINION)
-//     },
-//     onSettled: async () => {
-//       queryClient.invalidateQueries(ApiEndpoints.OPINION)
-//     },
-//   })
-// }
+export function useGetOneProperty(id: number) {
+  const { data, isFetching, isPending } = useQuery({
+    queryKey: [`${ApiEndpoints.PROPERTIES}-${id}`],
+    queryFn: () => propertiesClient.getById({ id })
+  })
+
+  return { data: data?.data, loading: isPending, isFetching }
+}
+
+export const useCreatePropertyMutation = () => {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  return useMutation({
+    mutationFn: propertiesClient.create,
+    onSuccess: (response: any) => {
+      toast({
+        variant: 'default',
+        title: 'Property created successfully'
+      })
+      localStorage.removeItem(PageRoutes.advertise.BASIC_DETAILS)
+      localStorage.removeItem(PageRoutes.advertise.AMENITIES_DETAILS)
+      localStorage.removeItem(PageRoutes.advertise.CALL_PREFERENCE)
+      localStorage.removeItem(PageRoutes.advertise.LOCATION_DETAILS)
+      localStorage.removeItem(PageRoutes.advertise.PROJECT_STATUS)
+      localStorage.removeItem(PageRoutes.advertise.PROPERTY_DETAILS)
+      localStorage.removeItem(PageRoutes.advertise.UPLOAD_PHOTOS)
+      queryClient.refetchQueries({ queryKey: [ApiEndpoints.PROPERTIES] })
+      router.push(`${PageRoutes.advertise.APPLICATION_COMPLETED}?email=${response.data?.property?.email}`)
+    },
+    onError: (error: any) => {
+      toast({
+        variant: 'destructive',
+        title: error.message
+      })
+    }
+  })
+}
+
+export const useDeletePropertyMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: propertiesClient.delete,
+    onSuccess: (data: any) => {
+      toast({
+        variant: 'default',
+        title: 'Property deleted successfully'
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        variant: 'destructive',
+        title: error.response.data.message
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [ApiEndpoints.PROPERTIES] })
+    }
+  })
+}
+
+export const useUpdatePropertyMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: propertiesClient.update,
+    onSuccess: (data: any) => {
+      toast({
+        variant: 'default',
+        title: 'Property updated successfully'
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        variant: 'destructive',
+        title: error.message
+      })
+    },
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: [ApiEndpoints.PROPERTIES] })
+    }
+  })
+}
+
+export function useAssignAgentMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: propertiesClient.assignAgent,
+    onSuccess: (response: any) => {
+      const { statusCode, data } = response
+
+      if (statusCode === 200) {
+        toast({
+          variant: 'default',
+          title: 'Agent assigned successfully'
+        })
+
+        queryClient.refetchQueries({ queryKey: [ApiEndpoints.PROPERTIES] })
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        variant: 'destructive',
+        title: error.message
+      })
+    }
+  })
+}

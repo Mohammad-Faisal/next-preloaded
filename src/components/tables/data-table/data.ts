@@ -1,3 +1,4 @@
+import { MortgageStatusEnum } from '@/constants/enums'
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -6,38 +7,62 @@ import {
   CircleIcon,
   CrossCircledIcon,
   QuestionMarkCircledIcon,
-  StopwatchIcon,
+  StopwatchIcon
 } from '@radix-ui/react-icons'
 
 export const labels = [
   {
     value: 'bug',
-    label: 'Bug',
+    label: 'Bug'
   },
   {
     value: 'feature',
-    label: 'Feature',
+    label: 'Feature'
   },
   {
     value: 'documentation',
-    label: 'Documentation',
-  },
+    label: 'Documentation'
+  }
 ]
+
+export interface FacetOption {
+  value: string
+  label: string
+  icon: any
+}
 
 export const statuses = [
   {
     value: 'pending',
     label: 'Pending',
-    icon: StopwatchIcon,
+    icon: StopwatchIcon
   },
   {
     value: 'completed',
     label: 'Completed',
-    icon: CheckCircledIcon,
+    icon: CheckCircledIcon
   },
   {
     value: 'rejected',
     label: 'Rejected',
-    icon: CrossCircledIcon,
-  },
+    icon: CrossCircledIcon
+  }
 ]
+
+// export const statuses = [
+//   {
+//     value: 'SUBMITTED',
+//     label: 'Pending',
+//     icon: StopwatchIcon
+//   },
+//   {
+//     value: MortgageStatusEnum.APPROVED.toString(),
+//     label: 'Completed',
+//     icon: CheckCircledIcon
+//   },
+//   {
+//     value: MortgageStatusEnum.CASE_DECLINED.toString(),
+//     label: 'Rejected',
+//     icon: CrossCircledIcon
+//   }
+// ]

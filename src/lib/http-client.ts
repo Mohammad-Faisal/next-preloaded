@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useToast } from '@/components/ui/use-toast'
 import { LocalStorageKeys } from '@/constants/local-storage-keys'
 
 const axiosClient = axios.create({
@@ -7,7 +6,8 @@ const axiosClient = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-  },
+    'ngrok-skip-browser-warning': 'anything'
+  }
 })
 
 axiosClient.interceptors.request.use((config: any) => {
@@ -15,7 +15,7 @@ axiosClient.interceptors.request.use((config: any) => {
   if (token) {
     config.headers = {
       ...config.headers,
-      Authorization: `Bearer ${token}`,
+      Authorization: token
     }
   }
   return config
@@ -29,29 +29,15 @@ axiosClient.interceptors.response.use(
     return response
   },
   (error: any) => {
-    const { toast } = useToast()
-    if (error.response) {
-      console.error(error.response.data)
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: error.response.data?.message,
-      })
-    } else if (error.request) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: 'No response was received.',
-      })
-    } else {
-      toast({
-        variant: 'destructive',
-        title: 'No response was received.',
-        description: 'error.response.data?.message',
-      })
-    }
+    // if (error.response) {
+    //   console.error(error.response.data)
+    // } else if (error.request) {
+    //   console.error(error.request)
+    // } else {
+    //   console.error('Error', error.message)
+    // }
     return Promise.reject(error)
-  },
+  }
 )
 
 export default class HttpClient {

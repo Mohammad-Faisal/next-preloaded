@@ -1,165 +1,215 @@
 'use client'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from './data-table'
-import { Property } from '@/constants/types'
-import { useGetProperties } from '@/data/hooks/usePropertiesClient'
-
-export const columns: ColumnDef<Property>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
-    accessorKey: 'propertyTypeId',
-    header: 'Property Type ID',
-  },
-  {
-    accessorKey: 'propertyTypeCategoryId',
-    header: 'Property Type Category ID',
-  },
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'description',
-    header: 'Description',
-  },
-  {
-    accessorKey: 'phone',
-    header: 'Phone',
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount',
-  },
-  {
-    accessorKey: 'size',
-    header: 'Size',
-  },
-  {
-    accessorKey: 'numberOfBedRooms',
-    header: 'Number of Bedrooms',
-  },
-  {
-    accessorKey: 'numberOfBathRooms',
-    header: 'Number of Bathrooms',
-  },
-  {
-    accessorKey: 'maintenanceFee',
-    header: 'Maintenance Fee',
-  },
-  {
-    accessorKey: 'address',
-    header: 'Address',
-  },
-  {
-    accessorKey: 'landmark',
-    header: 'Landmark',
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created At',
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated At',
-  },
-  {
-    accessorKey: 'locationId',
-    header: 'Location ID',
-  },
-  {
-    accessorKey: 'minimumContract',
-    header: 'Minimum Contract',
-  },
-  {
-    accessorKey: 'noticePeriod',
-    header: 'Notice Period',
-  },
-  {
-    accessorKey: 'deedNumber',
-    header: 'Deed Number',
-  },
-  {
-    accessorKey: 'unitNumber',
-    header: 'Unit Number',
-  },
-  {
-    accessorKey: 'buildingName',
-    header: 'Building Name',
-  },
-  {
-    accessorKey: 'floor',
-    header: 'Floor',
-  },
-  {
-    accessorKey: 'isApproved',
-    header: 'Is Approved',
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-  },
-  {
-    accessorKey: 'userId',
-    header: 'User ID',
-  },
-  {
-    accessorKey: 'draft',
-    header: 'Draft',
-  },
-  {
-    accessorKey: 'agentInfoId',
-    header: 'Agent Info ID',
-  },
-  {
-    accessorKey: 'paymentInterval',
-    header: 'Payment Interval',
-  },
-  {
-    accessorKey: 'emirateId',
-    header: 'Emirate ID',
-  },
-  {
-    accessorKey: 'projectStatus',
-    header: 'Project Status',
-  },
-  {
-    accessorKey: 'numberOfCheques',
-    header: 'Number of Cheques',
-  },
-  {
-    accessorKey: 'completionDate',
-    header: 'Completion Date',
-  },
-  {
-    accessorKey: 'noticePeriodOfRemainingRentalAgreement',
-    header: 'Notice Period of Remaining Rental Agreement',
-  },
-  {
-    accessorKey: 'numberOfLavatory',
-    header: 'Number of Lavatory',
-  },
-  {
-    accessorKey: 'rentalAmount',
-    header: 'Rental Amount',
-  },
-  {
-    accessorKey: 'trakheesiPermitNo',
-    header: 'Trakheesi Permit No',
-  },
-  {
-    accessorKey: 'lat',
-    header: 'Latitude',
-  },
-  {
-    accessorKey: 'lng',
-    header: 'Longitude',
-  },
-]
+import { useDeletePropertyMutation, useGetProperties } from '@/data/hooks/usePropertiesClient'
+import { Badge } from '../ui/badge'
+import Link from 'next/link'
+import { PageRoutes } from '@/constants/page-routes'
+import { Eye, FileEdit } from 'lucide-react'
+import ConfirmActionDialog from '../dialogs/confirm-action-dialog'
+import { Button } from '../ui/button'
+import ConfirmDeleteDialog from '../dialogs/confirm-delete-dialog'
+import UpdatePropertyForm from '@/components/forms/dashboard/property/update-property-form'
+import { Property } from '@/data/clients/propertiesClient'
+import currency from '@/lib/currency'
+import AssignAgentForm from '@/components/forms/dashboard/property/assign-agent-form'
+import { CallPreferenceEnum, PropertySubmissionStatusEnum, UserRoleEnum } from '@/constants/enums'
+import { useGetUserRole } from '@/data/hooks/useAuthClient'
+import { FacetOption } from './data-table/data'
+import { CheckCircledIcon, CrossCircledIcon, StopwatchIcon } from '@radix-ui/react-icons'
+import { DataTableColumnHeader } from './data-table/data-table-column-header'
+import UpdateNumberForm from '@/components/forms/dashboard/property/update-number-form'
 
 export default function PropertiesTable() {
+  const { mutate: deleteProperty, isPending } = useDeletePropertyMutation()
+
+  const userRole = useGetUserRole()
+  const isAdmin = userRole === UserRoleEnum.ADMIN || userRole === UserRoleEnum.SUPER_ADMIN
+  const columns: ColumnDef<Property>[] = [
+    {
+      accessorKey: 'id',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />
+    },
+    {
+      accessorKey: 'name',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+      cell: ({ row }) => {
+        return <span className="line-clamp-1 max-w-sm">{row.original.name}</span>
+      }
+    },
+    {
+      accessorKey: 'email',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />
+    },
+    {
+      accessorKey: 'phone',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" />,
+      cell: ({ row }) => {
+        const data = row.original
+        if (data.callPreference === CallPreferenceEnum.PURPLEROOF) {
+          return <span>{data.phone}</span>
+        }
+        return <span>{data.phone}</span>
+      }
+    },
+    {
+      accessorKey: 'amount',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
+      cell: ({ row }) => {
+        const monthlyIncome = row.original.amount
+        return <span>{currency.format(monthlyIncome)}</span>
+      }
+    },
+    {
+      accessorKey: 'landmark',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Landmark" />
+    },
+    {
+      accessorKey: 'callPreference',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Call Preference" />
+    },
+    {
+      accessorKey: 'createdAt',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
+      cell: ({ row }) => {
+        const createdAt = row.original.createdAt
+        return new Date(createdAt).toLocaleDateString()
+      }
+    },
+    {
+      accessorKey: 'agent',
+      header: 'Agent',
+      cell: ({ row }) => {
+        const data = row.original
+        if (data?.agentId) {
+          return <Badge className="bg-teal-600">Assigned</Badge>
+        }
+        return (
+          <Badge variant="outline" className="bg-red-500 text-white">
+            Not Assigned
+          </Badge>
+        )
+      }
+    },
+    {
+      accessorKey: 'submissionStatus',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Submission Status" />,
+      cell: ({ row }) => {
+        const data = row.original
+        if (data.submissionStatus === PropertySubmissionStatusEnum.REJECTED) {
+          return <Badge className={`bg-red-500 text-white hover:bg-red-400`}>{data.submissionStatus}</Badge>
+        }
+        return (
+          <Badge
+            variant="outline"
+            className={`uppercase ${
+              data.submissionStatus === PropertySubmissionStatusEnum.APPROVED ? 'bg-teal-600 text-white' : ''
+            }`}
+          >
+            {data.submissionStatus === PropertySubmissionStatusEnum.SUBMITTED
+              ? 'Waiting For approval'
+              : data.submissionStatus}
+          </Badge>
+        )
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id))
+      }
+    },
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center space-x-2">
+            <Link href={PageRoutes.dashboard.PROPERTY_DETAILS(row.original.id)}>
+              <Button size="sm">View Details</Button>
+            </Link>
+          </div>
+        )
+      }
+    }
+  ]
+
+  if (isAdmin) {
+    columns.push(
+      {
+        id: 'changeAgent',
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center gap-2">
+              {row.original.submissionStatus === PropertySubmissionStatusEnum.APPROVED && (
+                <ConfirmActionDialog
+                  title={row.original?.agentId ? 'Change Agent' : 'Assign Agent'}
+                  anchor={
+                    <Button variant="outline" size="sm">
+                      {row.original?.agentId ? 'Change Agent' : 'Assign Agent'}
+                    </Button>
+                  }
+                  content={<AssignAgentForm data={row.original} />}
+                />
+              )}
+              {row.original.callPreference === CallPreferenceEnum.PURPLEROOF && (
+                <ConfirmActionDialog
+                  title="Update Number"
+                  anchor={
+                    <Button variant="outline" size="sm">
+                      Update Number
+                    </Button>
+                  }
+                  content={<UpdateNumberForm data={row.original} />}
+                />
+              )}
+            </div>
+          )
+        }
+      },
+      {
+        id: 'adminActions',
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <ConfirmActionDialog
+              title="Edit Property"
+              anchor={
+                <Button variant="ghost">
+                  <FileEdit size={17} color="black" />
+                </Button>
+              }
+              content={<UpdatePropertyForm data={row.original} />}
+            />
+            <ConfirmDeleteDialog onDelete={() => deleteProperty(row.original.id)} isLoading={isPending} />
+          </div>
+        )
+      }
+    )
+  }
+
+  const propertyFilterOptions: FacetOption[] = [
+    {
+      label: 'Approved',
+      value: PropertySubmissionStatusEnum.APPROVED,
+      icon: CheckCircledIcon
+    },
+    {
+      label: 'Pending',
+      value: PropertySubmissionStatusEnum.SUBMITTED,
+      icon: StopwatchIcon
+    },
+    {
+      label: 'Rejected',
+      value: PropertySubmissionStatusEnum.REJECTED,
+      icon: CrossCircledIcon
+    }
+  ]
+
   const { loading, data } = useGetProperties()
-  return <DataTable columns={columns} data={data ?? []} isLoading={loading} />
+  return (
+    <DataTable
+      columns={columns}
+      data={data ?? []}
+      isLoading={loading}
+      filterKey="name"
+      facetKey={'submissionStatus'}
+      facetOptions={propertyFilterOptions}
+    />
+  )
 }
